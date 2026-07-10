@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f5f7fb">
+<title>Wisconsin Motorcycle Permit Prep</title>
+<style>
+:root{
+  color-scheme: light;
+  --bg: #eef2f8;
+  --bg-accent: radial-gradient(circle at top left, rgba(23, 92, 255, 0.15), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(255, 140, 80, 0.13), transparent 28%);
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-strong: #ffffff;
+  --text: #101828;
+  --muted: #667085;
+  --border: rgba(16, 24, 40, 0.10);
+  --primary: #165dff;
+  --primary-strong: #1148c8;
+  --primary-soft: rgba(22, 93, 255, 0.12);
+  --good: #12804a;
+  --good-soft: #dbf5e6;
+  --bad: #b42318;
+  --bad-soft: #fde2df;
+  --shadow: 0 18px 52px rgba(16, 24, 40, 0.10);
+  --radius-xl: 26px;
+  --radius-lg: 20px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+}
+
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg: #090b12;
+  --bg-accent: radial-gradient(circle at top left, rgba(64, 128, 255, 0.24), transparent 36%),
+    radial-gradient(circle at bottom right, rgba(255, 169, 116, 0.16), transparent 28%);
+  --surface: rgba(18, 22, 31, 0.88);
+  --surface-strong: #12161f;
+  --text: #f4f7fb;
+  --muted: #a8b0bf;
+  --border: rgba(255, 255, 255, 0.10);
+  --primary: #7ea3ff;
+  --primary-strong: #9bb5ff;
+  --primary-soft: rgba(126, 163, 255, 0.16);
+  --good: #5ee08b;
+  --good-soft: rgba(25, 64, 39, 0.96);
+  --bad: #ff8a8a;
+  --bad-soft: rgba(72, 24, 24, 0.96);
+  --shadow: 0 18px 52px rgba(0, 0, 0, 0.34);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+body{
+  background-image: var(--bg-accent);
+  background-attachment: fixed;
+  line-height: 1.45;
+}
+button,select{
+  font: inherit;
+}
+button{
+  border:0;
+  border-radius:16px;
+  min-height:48px;
+  padding:14px 16px;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+button:disabled{opacity:.55}
+.app{
+  width:min(760px, calc(100vw - 24px));
+  margin:0 auto;
+  padding:16px 0 36px;
+}
+.shell{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(20px);
+  overflow:hidden;
+}
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:20;
+  padding:16px 16px 12px;
+  background:linear-gradient(to bottom, color-mix(in srgb, var(--bg) 92%, transparent), color-mix(in srgb, var(--bg) 70%, transparent));
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(18px);
+}
+.toprow{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.eyebrow{
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin:0 0 6px;
+}
+h1{
+  margin:0;
+  font-size:clamp(24px, 5vw, 34px);
+  line-height:1.06;
+  letter-spacing:-0.03em;
+}
+.subtitle{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:15px;
+  max-width:58ch;
+}
+.theme-toggle{
+  background:var(--primary-soft);
+  color:var(--text);
+  border:1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
+  font-weight:700;
+  min-width:110px;
+}
+.content{
+  padding:16px;
+}
+.panel{
+  background:var(--surface-strong);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+}
+.hero{
+  display:grid;
+  gap:14px;
+}
+.hero-copy{
+  display:grid;
+  gap:10px;
+}
+.hero-title{
+  font-size:clamp(30px, 7vw, 46px);
+  line-height:1;
+  letter-spacing:-0.05em;
+  margin:0;
+}
+.hero-text{
+  margin:0;
+  color:var(--muted);
+  max-width:56ch;
+}
+.quick-starts{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px;
+}
+.quick-starts .wide{
+  grid-column:1 / -1;
+}
+.primary{
+  background:linear-gradient(180deg, var(--primary), var(--primary-strong));
+  color:white;
+  font-weight:800;
+  box-shadow:0 12px 26px color-mix(in srgb, var(--primary) 28%, transparent);
+}
+.secondary{
+  background:var(--surface-strong);
+  color:var(--text);
+  border:1px solid var(--border);
+  font-weight:700;
+}
+.ghost{
+  background:transparent;
+  color:var(--text);
+  border:1px solid var(--border);
+  font-weight:700;
+}
+.start-note{
+  color:var(--muted);
+  font-size:14px;
+  margin:2px 0 0;
+}
+.meta-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+.chip{
+  padding:7px 11px;
+  border-radius:999px;
+  background:var(--primary-soft);
+  color:var(--text);
+  font-size:13px;
+  font-weight:700;
+}
+.quiz-head{
+  display:grid;
+  gap:14px;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:10px;
+}
+.stat{
+  background:var(--surface-strong);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:12px 14px;
+}
+.stat-label{
+  display:block;
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+.stat-value{
+  font-size:18px;
+  font-weight:800;
+}
+.progress-shell{
+  height:12px;
+  background:color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, var(--primary), #54d18b);
+  transition:width .24s ease;
+}
+.question-card{
+  margin-top:14px;
+  background:var(--surface-strong);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+}
+.question-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:10px;
+}
+.question-text{
+  margin:0 0 16px;
+  font-size:clamp(20px, 4.7vw, 28px);
+  line-height:1.22;
+  letter-spacing:-0.02em;
+  font-weight:850;
+}
+.answers{
+  display:grid;
+  gap:10px;
+}
+.answer{
+  width:100%;
+  text-align:left;
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:15px 14px;
+  border-radius:18px;
+  line-height:1.35;
+  font-size:17px;
+  font-weight:650;
+}
+.answer:hover{
+  border-color:color-mix(in srgb, var(--primary) 40%, var(--border));
+}
+.answer.correct{
+  background:var(--good-soft);
+  border-color:color-mix(in srgb, var(--good) 55%, var(--border));
+}
+.answer.wrong{
+  background:var(--bad-soft);
+  border-color:color-mix(in srgb, var(--bad) 55%, var(--border));
+}
+.feedback{
+  margin-top:14px;
+  border-radius:18px;
+  padding:14px;
+  border:1px solid var(--border);
+}
+.feedback.good{
+  background:var(--good-soft);
+  border-color:color-mix(in srgb, var(--good) 40%, var(--border));
+}
+.feedback.bad{
+  background:var(--bad-soft);
+  border-color:color-mix(in srgb, var(--bad) 40%, var(--border));
+}
+.feedback-title{
+  display:block;
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+.feedback-text{
+  margin:0;
+  color:var(--text);
+}
+.feedback-meta{
+  display:block;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+}
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
+}
+.actions .primary,
+.actions .secondary,
+.actions .ghost{
+  flex:1 1 180px;
+}
+.results{
+  display:grid;
+  gap:14px;
+  text-align:left;
+}
+.results-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px;
+}
+.result-box{
+  background:var(--surface-strong);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:14px;
+}
+.result-number{
+  display:block;
+  font-size:28px;
+  line-height:1;
+  margin-top:6px;
+  font-weight:900;
+  letter-spacing:-0.04em;
+}
+.result-recommendation{
+  font-size:16px;
+  font-weight:800;
+}
+.hidden{display:none !important}
+@media (max-width: 640px){
+  .app{width:min(100vw, calc(100vw - 16px));padding:8px 0 24px}
+  .content,.topbar{padding-left:12px;padding-right:12px}
+  .panel,.question-card{padding:16px}
+  .quick-starts,.stats,.results-grid{grid-template-columns:1fr}
+  .toprow{align-items:flex-start}
+  .theme-toggle{min-width:96px}
+  .actions .primary,.actions .secondary,.actions .ghost{flex-basis:100%}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="shell">
+    <header class="topbar">
+      <div class="toprow">
+        <div>
+          <p class="eyebrow">Wisconsin Motorcycle Prep</p>
+          <h1>Wisconsin Motorcycle Permit Prep</h1>
+          <p class="subtitle">Handbook-based practice with instant feedback, randomized exams, retry missed mode, and dark mode.</p>
+        </div>
+        <button type="button" class="theme-toggle" id="themeToggle">Dark mode</button>
+      </div>
+    </header>
+    <main class="content" id="app"></main>
+  </div>
+</div>
+<script>
+const BANK = [{"category": "Licensing", "page": 6, "q": "A Wisconsin Cycle Instruction Permit (CYCI) is generally valid for:", "options": ["3 months", "6 months", "12 months", "24 months"], "answer": 1, "explanation": "The handbook states that the CYCI is valid for 6 months."}, {"category": "Licensing", "page": 6, "q": "To obtain a Wisconsin motorcycle instruction permit, you must be at least:", "options": ["14", "15", "16", "18"], "answer": 2, "explanation": "The minimum age listed is 16."}, {"category": "Licensing", "page": 6, "q": "If you are under 18, you must provide proof of enrollment in:", "options": ["A defensive driving course", "A basic rider course", "A commercial driving course", "A first-aid course"], "answer": 1, "explanation": "Applicants under 18 must show enrollment in a basic rider course."}, {"category": "Licensing", "page": 6, "q": "After holding three motorcycle instruction permits, you must do what before applying for a fourth?", "options": ["Wait one year", "Complete or enroll in a basic rider course", "Retake driver education", "Pass the road test first"], "answer": 1, "explanation": "The handbook requires completion of or enrollment in a basic rider course."}, {"category": "Licensing", "page": 7, "q": "After failing two motorcycle-in-traffic skills tests, you must:", "options": ["Wait 30 days", "Complete a basic rider course", "Retake the knowledge test", "Apply for a Class D license"], "answer": 1, "explanation": "A basic rider course is required after two failed skills tests."}, {"category": "Licensing", "page": 7, "q": "During darkness, an instruction permit holder must be accompanied by a licensed person who is at least:", "options": ["18", "21", "25", "30"], "answer": 2, "explanation": "The accompanying licensed person must be at least 25."}, {"category": "Licensing", "page": 7, "q": "The accompanying licensed person during darkness must have at least:", "options": ["1 year of licensed driving", "2 years of licensed driving", "5 years of licensed driving", "10 years of licensed driving"], "answer": 1, "explanation": "Two years of licensed driving experience are required."}, {"category": "Licensing", "page": 4, "q": "A valid Class D license is required to operate:", "options": ["A motorcycle", "An autocycle", "A motor-driven cycle", "A three-wheel motorcycle only"], "answer": 1, "explanation": "An autocycle is operated with a Class D license."}, {"category": "Licensing", "page": 3, "q": "A valid Class M license or motorcycle instruction permit is required to operate:", "options": ["A motorcycle", "An autocycle", "A bicycle", "A moped only"], "answer": 0, "explanation": "Motorcycles require Class M privileges."}, {"category": "Laws", "page": 10, "q": "Riding side saddle on a motorcycle is:", "options": ["Allowed at low speed", "Forbidden", "Allowed for passengers", "Required on three-wheel cycles"], "answer": 1, "explanation": "Wisconsin law forbids riding side saddle."}, {"category": "Laws", "page": 10, "q": "Motorcyclists are entitled to use:", "options": ["Half a traffic lane", "A full traffic lane", "Only the right third of a lane", "The shoulder"], "answer": 1, "explanation": "Motorcyclists are entitled to full use of a traffic lane."}, {"category": "Laws", "page": 10, "q": "When riding on a highway, the motorcycle's headlight and taillight must be:", "options": ["On only at night", "On at all times", "Off during daylight", "Used only in rain"], "answer": 1, "explanation": "The handbook states they must be on at all times on a highway."}, {"category": "Laws", "page": 11, "q": "At a vehicle-activated red light, you must stop for at least:", "options": ["20 seconds", "30 seconds", "45 seconds", "60 seconds"], "answer": 2, "explanation": "Wisconsin allows cautious movement only after at least 45 seconds and only when all other conditions are met."}, {"category": "Laws", "page": 11, "q": "At a marked parking space, how many motorcycles may park in one space?", "options": ["One", "Two", "Three", "Four"], "answer": 2, "explanation": "The handbook allows three cycles in one marked space."}, {"category": "Laws", "page": 10, "q": "A motorcycle passenger must:", "options": ["Sit in front of the operator", "Use a designated passenger seat and footrests", "Sit on the fuel tank", "Hold the handlebars"], "answer": 1, "explanation": "Passengers must use a proper passenger seat and footrests."}, {"category": "Mopeds", "page": 4, "q": "A Wisconsin moped may carry:", "options": ["One passenger", "No passenger", "Two passengers", "A passenger only under 18"], "answer": 1, "explanation": "Mopeds are designed for one person; carrying a passenger is illegal."}, {"category": "Mopeds", "page": 5, "q": "On roads with speed limits above 25 mph, mopeds must ride:", "options": ["Side by side", "Single file", "On the sidewalk", "In the left lane"], "answer": 1, "explanation": "Above 25 mph, mopeds must ride single file."}, {"category": "Mopeds", "page": 5, "q": "On roads with two or more lanes in each direction, mopeds generally operate in:", "options": ["The right lane", "The left lane", "Any lane", "The shoulder"], "answer": 0, "explanation": "They generally use the right lane except when turning left."}, {"category": "Protective gear", "page": 5, "q": "Eye protection is required for motorcycle operators:", "options": ["Only under age 18", "Only at night", "For all ages and circumstances unless an approved windshield qualifies", "Only with an instruction permit"], "answer": 2, "explanation": "Eye protection is required for all operators, subject to the handbook's approved windshield exception."}, {"category": "Protective gear", "page": 5, "q": "Eye protection worn during darkness must be:", "options": ["Tinted", "Clear", "Mirrored", "Yellow"], "answer": 1, "explanation": "Tinted or darkened eye protection is illegal at night."}, {"category": "Protective gear", "page": 14, "q": "A plastic shatter-resistant faceshield:", "options": ["Is unnecessary with a windshield", "Protects only the eyes", "Helps protect the whole face", "Is only for cold weather"], "answer": 2, "explanation": "A faceshield helps protect the whole face."}, {"category": "Protective gear", "page": 14, "q": "A proper motorcycle helmet should:", "options": ["Fit loosely", "Fit snugly all the way around", "Have frayed straps", "Move freely on the head"], "answer": 1, "explanation": "A helmet should fit snugly and have no defects."}, {"category": "Protective gear", "page": 15, "q": "Motorcycle boots should:", "options": ["Cover the ankles", "Have smooth soles", "Have long loose laces", "Be open-toed"], "answer": 0, "explanation": "Sturdy boots should cover the ankles and have durable slip-resistant soles."}, {"category": "Protective gear", "page": 15, "q": "Motorcycle gloves should be made of:", "options": ["Thin cotton only", "Leather or similar durable material", "Loose knit material", "Plastic wrap"], "answer": 1, "explanation": "Durable gloves improve grip and protect the hands."}, {"category": "Protective gear", "page": 15, "q": "A windshield is:", "options": ["A complete substitute for goggles or a faceshield", "Not a substitute for goggles or a faceshield", "Required on every motorcycle", "Only useful at night"], "answer": 1, "explanation": "The handbook specifically says a windshield is not a substitute."}, {"category": "Preparation", "page": 16, "q": "Before riding an unfamiliar motorcycle, you should:", "options": ["Ride aggressively to learn quickly", "Practice in a controlled area first", "Skip control checks", "Use only the rear brake"], "answer": 1, "explanation": "Get familiar with an unfamiliar motorcycle in a controlled area."}, {"category": "Preparation", "page": 16, "q": "Your feet should be able to:", "options": ["Reach the ground while seated", "Hang above the ground", "Touch only on one side", "Stay on the passenger pegs"], "answer": 0, "explanation": "The motorcycle should fit you so your feet reach the ground."}, {"category": "Preparation", "page": 16, "q": "At minimum, a street-legal motorcycle should have:", "options": ["Only a headlight", "Headlight, taillight, brake light, brakes, signals, horn, and mirrors", "Only one brake", "No mirrors"], "answer": 1, "explanation": "The handbook lists these minimum items."}, {"category": "Preparation", "page": 18, "q": "Before mounting, check tire:", "options": ["Color only", "Pressure, wear, and tread", "Brand only", "Temperature only"], "answer": 1, "explanation": "Tire pressure, wear, and tread should be checked."}, {"category": "Preparation", "page": 18, "q": "The brake light should be tested using:", "options": ["Only the front brake", "Only the rear brake", "Both brake controls", "The horn"], "answer": 2, "explanation": "Each brake control should activate the brake light."}, {"category": "Preparation", "page": 18, "q": "When released, the throttle should:", "options": ["Stay where it is", "Snap back", "Move slowly", "Lock in place"], "answer": 1, "explanation": "The throttle should snap back when released."}, {"category": "Preparation", "page": 18, "q": "Mirrors should be adjusted:", "options": ["While riding", "Before starting", "Only after dark", "At highway speed"], "answer": 1, "explanation": "Adjust mirrors before moving."}, {"category": "Preparation", "page": 18, "q": "At least once a week, check:", "options": ["Wheels, cables, fasteners, and fluids", "Only paint condition", "Only seat height", "Only the horn"], "answer": 0, "explanation": "The handbook recommends weekly checks of these items."}, {"category": "Impairment", "page": 19, "q": "Under Wisconsin's 'Not A Drop' law, riders under 21:", "options": ["May ride after one drink", "Can be arrested for any amount of alcohol", "Are exempt from OWI laws", "May ride if accompanied"], "answer": 1, "explanation": "Absolute sobriety applies to riders under 21."}, {"category": "Impairment", "page": 19, "q": "Refusing a requested alcohol or drug test can result in:", "options": ["No penalty", "At least a one-year revocation", "A warning only", "A 30-day suspension only"], "answer": 1, "explanation": "Wisconsin's implied-consent law imposes at least a one-year revocation."}, {"category": "Impairment", "page": 19, "q": "Alcohol affects:", "options": ["Only vision", "Judgment, reaction time, vision, and control", "Only balance", "Only hearing"], "answer": 1, "explanation": "Alcohol impairs nearly every skill required for safe riding."}, {"category": "Impairment", "page": 19, "q": "Prescription and over-the-counter medicines:", "options": ["Can never affect riding", "May impair riding ability", "Are always safe with alcohol", "Do not affect reaction time"], "answer": 1, "explanation": "Many medicines can impair alertness, vision, and reflexes."}, {"category": "Fatigue", "page": 20, "q": "Experienced riders seldom ride more than about:", "options": ["4 hours a day", "6 hours a day", "10 hours a day", "14 hours a day"], "answer": 1, "explanation": "The handbook says experienced riders seldom ride more than about six hours a day."}, {"category": "Fatigue", "page": 20, "q": "On long trips, take a break at least every:", "options": ["30 minutes", "2 hours", "4 hours", "6 hours"], "answer": 1, "explanation": "The handbook recommends getting off the motorcycle at least every two hours."}, {"category": "Fatigue", "page": 20, "q": "Artificial stimulants:", "options": ["Prevent fatigue permanently", "Can cause extreme fatigue when they wear off", "Are recommended for long rides", "Replace sleep"], "answer": 1, "explanation": "Stimulants may cause severe fatigue or depression when they wear off."}, {"category": "Body position", "page": 21, "q": "Your knees should normally be:", "options": ["Held away from the tank", "Against the gas tank", "Pointed outward", "Locked straight"], "answer": 1, "explanation": "Keeping knees against the tank improves balance."}, {"category": "Body position", "page": 21, "q": "Your feet should normally remain:", "options": ["On the footpegs near the controls", "Dragging lightly", "Pointed downward", "On the exhaust"], "answer": 0, "explanation": "Keep feet on the pegs and near the controls."}, {"category": "Body position", "page": 21, "q": "Your right wrist should begin:", "options": ["Bent high", "Flat", "Fully twisted", "Below the grip"], "answer": 1, "explanation": "A flat wrist helps prevent accidental excess throttle."}, {"category": "Shifting", "page": 22, "q": "When stopped, you should remain in:", "options": ["Neutral", "First gear", "Top gear", "Second gear"], "answer": 1, "explanation": "First gear allows you to move quickly if danger approaches."}, {"category": "Shifting", "page": 22, "q": "It is best to change gears:", "options": ["Before entering a turn", "In the middle of every turn", "Only after stopping", "While braking hard"], "answer": 0, "explanation": "Shifting before the turn helps preserve stability."}, {"category": "Braking", "page": 22, "q": "For normal stopping, you should use:", "options": ["Only the rear brake", "Only the front brake", "Both brakes", "Engine braking only"], "answer": 2, "explanation": "The handbook recommends using both brakes every time."}, {"category": "Braking", "page": 22, "q": "The front brake can provide at least:", "options": ["One-quarter of stopping power", "One-half", "Three-quarters", "All stopping power"], "answer": 2, "explanation": "The front brake provides at least three-quarters of stopping power."}, {"category": "Braking", "page": 22, "q": "When applying the front brake, you should:", "options": ["Grab it suddenly", "Squeeze it progressively", "Avoid it completely", "Pump it rapidly"], "answer": 1, "explanation": "Squeeze the front brake; do not grab it."}, {"category": "Turning", "page": 23, "q": "The four basic turning steps are:", "options": ["Stop, Scan, Shift, Steer", "Slow, Look, Lean, Roll", "Search, Signal, Swerve, Stop", "Brake, Turn, Accelerate, Stop"], "answer": 1, "explanation": "The handbook sequence is Slow, Look, Lean, Roll."}, {"category": "Turning", "page": 23, "q": "To initiate a left turn at normal speed, you should:", "options": ["Press the left handgrip", "Pull the left handgrip", "Press the right handgrip", "Turn only with your body"], "answer": 0, "explanation": "Press left, lean left, go left."}, {"category": "Turning", "page": 23, "q": "When turning, look:", "options": ["At the pavement directly ahead", "Through the turn where you want to go", "At the front wheel", "At the edge line"], "answer": 1, "explanation": "Look through the turn."}, {"category": "Turning", "page": 23, "q": "In a normal-speed turn, the rider and motorcycle should:", "options": ["Lean together", "Lean in opposite directions", "Remain upright", "Keep the motorcycle vertical"], "answer": 0, "explanation": "At normal speeds, rider and motorcycle lean together."}, {"category": "Turning", "page": 23, "q": "In a slow, tight turn, you should:", "options": ["Lean your body with the motorcycle", "Counterbalance by keeping your body more upright", "Use only the front brake", "Look at the ground"], "answer": 1, "explanation": "Counterbalancing improves low-speed control."}, {"category": "Following", "page": 25, "q": "The minimum recommended following distance under ideal conditions is:", "options": ["2 seconds", "3 seconds", "4 seconds", "6 seconds"], "answer": 2, "explanation": "The handbook recommends at least four seconds."}, {"category": "Following", "page": 25, "q": "A four-second following distance gives you:", "options": ["Less visibility", "Time to stop or swerve", "Permission to speed", "A reason to ride beside cars"], "answer": 1, "explanation": "It provides time and space to react."}, {"category": "Following", "page": 25, "q": "When behind a car, ride where:", "options": ["You are hidden from its mirrors", "The driver can see you in the rearview mirror", "You are directly beside it", "You are in its blind spot"], "answer": 1, "explanation": "Visibility to the driver ahead is important."}, {"category": "Tailgaters", "page": 26, "q": "The best response to a tailgater is usually to:", "options": ["Speed up", "Let the tailgater pass", "Make hand gestures", "Brake suddenly"], "answer": 1, "explanation": "Change lanes or create space so the tailgater can pass."}, {"category": "Tailgaters", "page": 26, "q": "Speeding up to escape a tailgater:", "options": ["Solves the problem", "Creates a faster tailgater", "Is required", "Is safer than changing lanes"], "answer": 1, "explanation": "Speeding up usually worsens the situation."}, {"category": "Lane position", "page": 24, "q": "The best lane position is:", "options": ["Always the left third", "Always the center", "The position that maximizes visibility, space, and escape options", "Always the right third"], "answer": 2, "explanation": "There is no single best lane position for every situation."}, {"category": "Lane position", "page": 24, "q": "If hazards are on both sides, the best position is often:", "options": ["The center path", "The shoulder", "The left edge", "The right edge"], "answer": 0, "explanation": "The center path may provide the best space cushion."}, {"category": "Lane position", "page": 24, "q": "The oily center strip is usually:", "options": ["Always unsafe", "Usable when dry except where heavy buildup exists", "The only safe place", "Illegal to ride on"], "answer": 1, "explanation": "It is generally usable when dry, though heavy buildup should be avoided."}, {"category": "Passing", "page": 26, "q": "When passing another vehicle, you should:", "options": ["Remain in its blind spot", "Ride through its blind spot quickly", "Exceed the speed limit", "Return without checking"], "answer": 1, "explanation": "Minimize time spent in the blind spot."}, {"category": "Passing", "page": 27, "q": "When being passed, you should normally ride:", "options": ["In the center portion of your lane", "At the far edge away from the vehicle", "On the shoulder", "Along the centerline"], "answer": 0, "explanation": "The center portion provides room from the passing vehicle and wind blast."}, {"category": "Lane sharing", "page": 27, "q": "Lane sharing with a car is generally:", "options": ["Recommended", "Prohibited", "Required in traffic", "Allowed on freeways"], "answer": 1, "explanation": "Cars and motorcycles each need a full lane."}, {"category": "Merging", "page": 27, "q": "When a merging vehicle is approaching, you should:", "options": ["Block it", "Change lanes or adjust speed to create room", "Maintain position no matter what", "Ride beside it"], "answer": 1, "explanation": "Give merging traffic room whenever possible."}, {"category": "Blind spots", "page": 28, "q": "You should avoid riding beside cars because:", "options": ["They may change lanes into you and block your escape route", "It saves fuel", "You cannot use signals", "It is always illegal"], "answer": 0, "explanation": "Cars alongside create blind-spot and escape-route hazards."}, {"category": "S.E.E.", "page": 28, "q": "S.E.E. stands for:", "options": ["Search, Evaluate, Execute", "Scan, Escape, Enter", "Stop, Examine, Exit", "Signal, Enter, Escape"], "answer": 0, "explanation": "S.E.E. means Search, Evaluate, Execute."}, {"category": "S.E.E.", "page": 29, "q": "In high-risk areas, you should:", "options": ["Cover the clutch and both brakes", "Shift into neutral", "Ride faster", "Turn off the headlight"], "answer": 0, "explanation": "Covering controls reduces reaction time."}, {"category": "S.E.E.", "page": 21, "q": "You should scan your path of travel approximately:", "options": ["4 seconds ahead", "8 seconds ahead", "12 seconds ahead", "20 seconds ahead"], "answer": 2, "explanation": "The handbook recommends scanning about 12 seconds ahead."}, {"category": "Intersections", "page": 30, "q": "At intersections, the biggest dangers include:", "options": ["Cars turning left in front of you and cars entering from side streets", "Only parked cars", "Only pedestrians", "Only traffic behind you"], "answer": 0, "explanation": "These are the primary intersection conflicts described."}, {"category": "Intersections", "page": 30, "q": "Making eye contact with another driver:", "options": ["Guarantees they will yield", "Does not guarantee they will yield", "Means you may speed up", "Eliminates the need to cover brakes"], "answer": 1, "explanation": "Never rely on eye contact as proof of yielding."}, {"category": "Intersections", "page": 30, "q": "As you approach an intersection, you should:", "options": ["Reduce speed and cover the clutch and both brakes", "Shift to neutral", "Ride in a blind spot", "Turn off your headlight"], "answer": 0, "explanation": "This improves readiness and visibility."}, {"category": "Intersections", "page": 31, "q": "At a blind intersection with a stop sign, you should:", "options": ["Stop once and accelerate", "Stop at the line, then edge forward and stop again if needed", "Ride through without stopping", "Use the shoulder"], "answer": 1, "explanation": "A second stop may be needed to improve your view."}, {"category": "Parking", "page": 31, "q": "When passing parked cars, ride toward:", "options": ["The left side of your lane when conditions allow", "The curb", "The center line regardless of traffic", "The shoulder"], "answer": 0, "explanation": "This creates more room from opening doors and pedestrians."}, {"category": "Parking", "page": 32, "q": "When parking at the roadside, position the motorcycle:", "options": ["Parallel to the curb", "At about 90 degrees with the rear wheel at the curb", "On the sidewalk", "Facing traffic in the lane"], "answer": 1, "explanation": "The handbook recommends a 90-degree angle with the rear wheel touching the curb."}, {"category": "Visibility", "page": 33, "q": "Reflective clothing is useful:", "options": ["Only at night", "Only during the day", "Day and night", "Only in rain"], "answer": 2, "explanation": "Reflective material helps others see you day and night."}, {"category": "Visibility", "page": 33, "q": "To improve visibility, you should:", "options": ["Wear bright clothing and use your headlight", "Ride close to other vehicles", "Stay in blind spots", "Turn off signals"], "answer": 0, "explanation": "Bright gear, lights, and good position improve visibility."}, {"category": "Visibility", "page": 33, "q": "During the day, your headlight should generally be:", "options": ["Off", "On, with high beam when appropriate", "Covered", "Used only in rain"], "answer": 1, "explanation": "The handbook recommends keeping it on and using high beam during the day when appropriate."}, {"category": "Visibility", "page": 33, "q": "At night when meeting or following traffic, use:", "options": ["High beam", "Low beam", "Parking lights only", "No headlight"], "answer": 1, "explanation": "Use low beam when meeting or following traffic."}, {"category": "Signals", "page": 33, "q": "Turn signals should be used:", "options": ["Only when other traffic is visible", "For every turn and lane change", "Only at night", "Only on highways"], "answer": 1, "explanation": "Use signals anytime you plan to turn or change lanes."}, {"category": "Signals", "page": 34, "q": "After completing a turn, you should:", "options": ["Leave the signal on", "Cancel the signal", "Switch to high beam", "Flash the brake light"], "answer": 1, "explanation": "An uncanceled signal can mislead other drivers."}, {"category": "Brake light", "page": 34, "q": "Before slowing suddenly, you should:", "options": ["Flash your brake light", "Turn off your headlight", "Move to the shoulder", "Sound the horn continuously"], "answer": 0, "explanation": "Flashing the brake light warns traffic behind you."}, {"category": "Mirrors", "page": 34, "q": "Before changing lanes, you should:", "options": ["Check only the mirrors", "Use mirrors and a head check", "Signal only", "Look forward only"], "answer": 1, "explanation": "Motorcycles have blind spots, so a head check is essential."}, {"category": "Night riding", "page": 35, "q": "At night, you should generally:", "options": ["Reduce following distance", "Increase following distance", "Ride faster", "Use only the shoulder"], "answer": 1, "explanation": "Reduced visibility requires more time and space."}, {"category": "Quick stops", "page": 36, "q": "For a quick stop, you should:", "options": ["Use only the front brake", "Use only the rear brake", "Use both brakes at the same time", "Shift to neutral first"], "answer": 2, "explanation": "Apply both brakes together."}, {"category": "Quick stops", "page": 36, "q": "If the front wheel locks, you should:", "options": ["Keep it locked", "Release and reapply the brake", "Accelerate", "Turn sharply"], "answer": 1, "explanation": "Release the front brake and reapply progressively."}, {"category": "Quick stops", "page": 36, "q": "If the rear wheel locks while upright and traveling straight on a good surface, you may:", "options": ["Keep it locked until stopped", "Release it immediately in every case", "Accelerate", "Turn sharply"], "answer": 0, "explanation": "The handbook allows keeping it locked under those conditions."}, {"category": "Swerving", "page": 36, "q": "When swerving, you should:", "options": ["Brake while swerving", "Separate braking and swerving", "Lock the rear wheel", "Look at the obstacle"], "answer": 1, "explanation": "Brake before or after the swerve, never during it."}, {"category": "Swerving", "page": 36, "q": "To swerve correctly, press the handgrip:", "options": ["Opposite the intended direction", "In the direction of the intended escape", "Both equally", "Downward only"], "answer": 1, "explanation": "Press the grip on the side of the intended escape."}, {"category": "Cornering", "page": 37, "q": "A primary cause of single-vehicle motorcycle crashes is:", "options": ["Running wide in a curve", "Using both brakes", "Wearing reflective gear", "Checking mirrors"], "answer": 0, "explanation": "Riders often enter curves too fast and run wide."}, {"category": "Surfaces", "page": 38, "q": "To cross an obstacle you cannot avoid, approach it at approximately:", "options": ["30 degrees", "45 degrees", "90 degrees", "Parallel"], "answer": 2, "explanation": "Approach as close to a right angle as practical."}, {"category": "Surfaces", "page": 38, "q": "When riding over an unavoidable obstacle, you should:", "options": ["Rise slightly off the seat", "Lean far back", "Brake hard at contact", "Turn sharply"], "answer": 0, "explanation": "Put weight on the footpegs and rise slightly."}, {"category": "Surfaces", "page": 39, "q": "When it first begins to rain, the safest lane area is usually:", "options": ["The oily center strip", "The tire tracks left by cars", "The shoulder", "The lane divider"], "answer": 1, "explanation": "The tire tracks are usually less slippery."}, {"category": "Surfaces", "page": 39, "q": "On an extremely slippery surface, you should:", "options": ["Keep the motorcycle upright and avoid braking", "Lean sharply", "Use only the front brake", "Accelerate"], "answer": 0, "explanation": "Keep the motorcycle straight and proceed slowly."}, {"category": "Surfaces", "page": 40, "q": "For tracks or seams running parallel to your path, cross them at least at:", "options": ["15 degrees", "30 degrees", "45 degrees", "90 degrees only"], "answer": 2, "explanation": "The handbook recommends at least 45 degrees."}, {"category": "Surfaces", "page": 40, "q": "On bridge gratings or rain grooves, you should:", "options": ["Fight the handlebars", "Relax and ride straight", "Accelerate sharply", "Zigzag"], "answer": 1, "explanation": "A slight wandering sensation is normal."}, {"category": "Mechanical", "page": 41, "q": "A front tire flat usually makes steering feel:", "options": ["Light", "Heavy", "Unchanged", "Loose only at high speed"], "answer": 1, "explanation": "A front flat typically makes steering heavy."}, {"category": "Mechanical", "page": 41, "q": "A rear tire flat often causes the motorcycle to:", "options": ["Jerk or sway", "Turn off", "Accelerate", "Steer heavily"], "answer": 0, "explanation": "A rear flat often causes rear-end instability."}, {"category": "Mechanical", "page": 42, "q": "If the throttle sticks, you should:", "options": ["Use the engine cut-off switch and pull in the clutch", "Apply only the rear brake", "Shift into a higher gear", "Accelerate"], "answer": 0, "explanation": "Cut power, disengage the engine, and pull off safely."}, {"category": "Mechanical", "page": 42, "q": "If your motorcycle starts to wobble, you should:", "options": ["Accelerate out of it", "Grip firmly and gradually close the throttle", "Brake hard", "Fight the handlebars"], "answer": 1, "explanation": "Do not accelerate or brake; close the throttle gradually."}, {"category": "Mechanical", "page": 43, "q": "If the engine seizes, you should:", "options": ["Accelerate", "Squeeze the clutch", "Lock the rear brake", "Turn off the headlight"], "answer": 1, "explanation": "Pull in the clutch to disconnect the engine from the rear wheel."}, {"category": "Mechanical", "page": 43, "q": "If a chain breaks, you should:", "options": ["Accelerate", "Close the throttle and brake to a stop", "Shift into a higher gear", "Continue riding"], "answer": 1, "explanation": "Reduce power and stop smoothly."}, {"category": "Passengers", "page": 44, "q": "A passenger should:", "options": ["Lean opposite the rider", "Lean with the rider", "Sit as far back as possible", "Put feet down at stops"], "answer": 1, "explanation": "The passenger should stay directly behind and lean with the rider."}, {"category": "Passengers", "page": 44, "q": "A passenger should keep both feet on the footpegs:", "options": ["Only while moving", "Even when stopped", "Only in curves", "Only on highways"], "answer": 1, "explanation": "Passengers should keep both feet on the pegs at all times."}, {"category": "Passengers", "page": 45, "q": "With a passenger, you should:", "options": ["Start slowing earlier", "Use smaller gaps", "Ride faster", "Reduce your space cushion"], "answer": 0, "explanation": "Extra weight increases stopping distance and slows handling."}, {"category": "Cargo", "page": 45, "q": "When carrying cargo, place it:", "options": ["High and behind the rear axle", "Low and forward", "On one side only", "On the handlebars"], "answer": 1, "explanation": "Keep loads low, forward, balanced, and secure."}, {"category": "Cargo", "page": 45, "q": "Cargo should be checked:", "options": ["Only before departure", "Periodically during the trip", "Only after arriving", "Never if tied down"], "answer": 1, "explanation": "Loads can shift and should be checked periodically."}, {"category": "Group riding", "page": 46, "q": "A group of motorcycles should normally ride in:", "options": ["A staggered formation", "Side-by-side pairs", "A tight cluster", "The shoulder"], "answer": 0, "explanation": "A staggered formation preserves space."}, {"category": "Group riding", "page": 46, "q": "Inexperienced riders in a group should ride:", "options": ["At the very front", "Just behind the leader", "At the very back", "Beside the leader"], "answer": 1, "explanation": "Beginners should ride just behind the leader."}, {"category": "Group riding", "page": 46, "q": "A riding group should generally be limited to:", "options": ["Two riders", "Four or five riders", "Ten riders", "Any size"], "answer": 1, "explanation": "The handbook recommends small groups of four or five."}, {"category": "Group riding", "page": 47, "q": "Group riders should move to single file when:", "options": ["Riding curves, turning, or entering/leaving a highway", "On straight open roads only", "Stopped at lights only", "Passing parked cars only"], "answer": 0, "explanation": "Single file provides extra space in these situations."}, {"category": "Roundabouts", "page": 12, "q": "At a roundabout, you should yield to:", "options": ["Traffic on the left", "Traffic on the right only", "No one", "Only trucks"], "answer": 0, "explanation": "Yield to vehicles already in the roundabout, approaching from the left."}, {"category": "Roundabouts", "page": 12, "q": "When exiting a roundabout, use:", "options": ["Your left turn signal", "Your right turn signal", "No signal", "Hazard lights"], "answer": 1, "explanation": "Signal right as you approach your exit."}, {"category": "Railroad", "page": 13, "q": "At railroad tracks, you should:", "options": ["Shift gears while crossing", "Never enter unless you can clear the tracks", "Ride around lowered gates", "Stop on the tracks"], "answer": 1, "explanation": "Never stop or shift while on the tracks."}, {"category": "Railroad", "page": 13, "q": "At a crossing with lowered gates, you should:", "options": ["Ride around them if no train is visible", "Wait until gates rise and lights stop flashing", "Cross slowly", "Use the shoulder"], "answer": 1, "explanation": "Never drive around lowered gates."}, {"category": "Rural", "page": 13, "q": "If you see one deer near the road, you should:", "options": ["Assume it is alone", "Expect more deer nearby", "Speed up", "Turn off the headlight"], "answer": 1, "explanation": "Deer often travel in groups."}, {"category": "Rural", "page": 13, "q": "If you must avoid a deer, you should:", "options": ["Brake and swerve at the same time", "Brake first, then swerve if needed", "Swerve first while accelerating", "Use only the rear brake"], "answer": 1, "explanation": "Separate braking from swerving."}];
+const STORAGE_KEY = 'wisconsin-motorcycle-quiz-state';
+const THEME_KEY = 'wisconsin-motorcycle-quiz-theme';
+const PASS_THRESHOLD = 80;
+
+const app = document.getElementById('app');
+const themeToggle = document.getElementById('themeToggle');
+
+const state = {
+  view: 'home',
+  modeLabel: '10-question quiz',
+  total: 10,
+  quiz: [],
+  index: 0,
+  correct: 0,
+  missed: [],
+  answered: false,
+  selectedChoice: null,
+  completed: false
+};
+
+function shuffleIndices(indices) {
+  const copy = indices.slice();
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = copy[i];
+    copy[i] = copy[j];
+    copy[j] = temp;
+  }
+  return copy;
+}
+
+function allIndices() {
+  return BANK.map(function(_, index) {
+    return index;
+  });
+}
+
+function getTheme() {
+  const stored = localStorage.getItem(THEME_KEY);
+  if (stored === 'dark' || stored === 'light') {
+    return stored;
+  }
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  themeToggle.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+  localStorage.setItem(THEME_KEY, theme);
+}
+
+function saveState() {
+  const payload = {
+    view: state.view,
+    modeLabel: state.modeLabel,
+    total: state.total,
+    quiz: state.quiz,
+    index: state.index,
+    correct: state.correct,
+    missed: state.missed,
+    answered: state.answered,
+    selectedChoice: state.selectedChoice,
+    completed: state.completed
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+}
+
+function clearState() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function restoreState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) {
+    return false;
+  }
+  try {
+    const saved = JSON.parse(raw);
+    if (!Array.isArray(saved.quiz) || typeof saved.index !== 'number') {
+      return false;
+    }
+    state.view = saved.view === 'quiz' || saved.view === 'results' ? saved.view : 'home';
+    state.modeLabel = typeof saved.modeLabel === 'string' ? saved.modeLabel : '10-question quiz';
+    state.total = typeof saved.total === 'number' ? saved.total : saved.quiz.length;
+    state.quiz = saved.quiz.filter(function(index) {
+      return Number.isInteger(index) && index >= 0 && index < BANK.length;
+    });
+    state.index = Math.min(Math.max(saved.index, 0), Math.max(state.quiz.length - 1, 0));
+    state.correct = typeof saved.correct === 'number' ? saved.correct : 0;
+    state.missed = Array.isArray(saved.missed) ? saved.missed.filter(function(index) {
+      return Number.isInteger(index) && index >= 0 && index < BANK.length;
+    }) : [];
+    state.answered = Boolean(saved.answered);
+    state.selectedChoice = Number.isInteger(saved.selectedChoice) ? saved.selectedChoice : null;
+    state.completed = Boolean(saved.completed);
+    if (!state.completed && state.quiz.length) {
+      state.view = 'quiz';
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
+  return false;
+}
+
+function startQuiz(total, indices, label) {
+  const pool = Array.isArray(indices) && indices.length ? indices.slice() : allIndices();
+  const selected = shuffleIndices(pool);
+  state.view = 'quiz';
+  state.modeLabel = label;
+  state.total = Math.min(total, selected.length);
+  state.quiz = selected.slice(0, state.total);
+  state.index = 0;
+  state.correct = 0;
+  state.missed = [];
+  state.answered = false;
+  state.selectedChoice = null;
+  state.completed = false;
+  saveState();
+  render();
+}
+
+function startRetryMissed() {
+  if (!state.missed.length) {
+    return;
+  }
+  const label = 'Retry missed';
+  startQuiz(state.missed.length, state.missed, label);
+}
+
+function startNewSession() {
+  clearState();
+  state.view = 'home';
+  state.modeLabel = '10-question quiz';
+  state.total = 10;
+  state.quiz = [];
+  state.index = 0;
+  state.correct = 0;
+  state.missed = [];
+  state.answered = false;
+  state.selectedChoice = null;
+  state.completed = false;
+  render();
+}
+
+function currentQuestion() {
+  return BANK[state.quiz[state.index]];
+}
+
+function renderHome() {
+  const resumeAvailable = state.quiz.length && !state.completed;
+  const panel = document.createElement('section');
+  panel.className = 'panel hero';
+
+  const copy = document.createElement('div');
+  copy.className = 'hero-copy';
+
+  const title = document.createElement('h2');
+  title.className = 'hero-title';
+  title.textContent = 'Study the handbook on your phone, then jump straight into a quiz.';
+  copy.appendChild(title);
+
+  const text = document.createElement('p');
+  text.className = 'hero-text';
+  text.textContent = 'The quiz starts instantly, shuffles questions every time, saves progress on refresh, and keeps the original handbook-based question bank intact.';
+  copy.appendChild(text);
+
+  const meta = document.createElement('div');
+  meta.className = 'meta-row';
+  ['Instant feedback', 'Randomized order', 'Retry missed', 'Dark mode'].forEach(function(label) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = label;
+    meta.appendChild(chip);
+  });
+  copy.appendChild(meta);
+  panel.appendChild(copy);
+
+  const starts = document.createElement('div');
+  starts.className = 'quick-starts';
+  starts.appendChild(buildStartButton('Start 10-Question Quiz', function() {
+    startQuiz(10, null, '10-question quiz');
+  }));
+  starts.appendChild(buildStartButton('Start 25-Question Quiz', function() {
+    startQuiz(25, null, '25-question quiz');
+  }));
+  starts.appendChild(buildStartButton('Start 50-Question Quiz', function() {
+    startQuiz(50, null, '50-question quiz');
+  }));
+  starts.appendChild(buildStartButton('Start 100-Question Quiz', function() {
+    startQuiz(100, null, '100-question quiz');
+  }));
+  starts.appendChild(buildStartButton('Study All Questions', function() {
+    startQuiz(BANK.length, null, 'study all questions');
+  }, true, 'wide'));
+  panel.appendChild(starts);
+
+  if (resumeAvailable) {
+    const resume = document.createElement('button');
+    resume.type = 'button';
+    resume.className = 'secondary';
+    resume.textContent = 'Resume current quiz';
+    resume.addEventListener('click', function() {
+      state.view = 'quiz';
+      render();
+    });
+    panel.appendChild(resume);
+
+    const note = document.createElement('p');
+    note.className = 'start-note';
+    note.textContent = 'A quiz is already in progress and can be resumed.';
+    panel.appendChild(note);
+  }
+
+  app.innerHTML = '';
+  app.appendChild(panel);
+}
+
+function buildStartButton(label, handler, wide) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = wide ? 'primary wide' : 'primary';
+  button.textContent = label;
+  button.addEventListener('click', handler);
+  return button;
+}
+
+function renderQuiz() {
+  const question = currentQuestion();
+  if (!question) {
+    renderResults();
+    return;
+  }
+
+  const answeredCount = state.index + (state.answered ? 1 : 0);
+  const progress = state.quiz.length ? (answeredCount / state.quiz.length) * 100 : 0;
+
+  const panel = document.createElement('section');
+  panel.className = 'quiz-head';
+
+  const stats = document.createElement('div');
+  stats.className = 'stats';
+  const statItems = [
+    ['Question', (state.index + 1) + ' / ' + state.quiz.length],
+    ['Score', state.correct + ' correct'],
+    ['Mode', state.modeLabel]
+  ];
+  statItems.forEach(function(item) {
+    const box = document.createElement('div');
+    box.className = 'stat';
+    const label = document.createElement('span');
+    label.className = 'stat-label';
+    label.textContent = item[0];
+    const value = document.createElement('span');
+    value.className = 'stat-value';
+    value.textContent = item[1];
+    box.appendChild(label);
+    box.appendChild(value);
+    stats.appendChild(box);
+  });
+  panel.appendChild(stats);
+
+  const progressShell = document.createElement('div');
+  progressShell.className = 'progress-shell';
+  const progressBar = document.createElement('div');
+  progressBar.className = 'progress-bar';
+  progressBar.style.width = progress.toFixed(2) + '%';
+  progressShell.appendChild(progressBar);
+  panel.appendChild(progressShell);
+
+  const card = document.createElement('section');
+  card.className = 'question-card';
+
+  const meta = document.createElement('div');
+  meta.className = 'question-meta';
+  const category = document.createElement('span');
+  category.textContent = question.category;
+  const dot = document.createElement('span');
+  dot.textContent = '•';
+  const page = document.createElement('span');
+  page.textContent = 'Handbook page ' + question.page;
+  meta.appendChild(category);
+  meta.appendChild(dot);
+  meta.appendChild(page);
+  card.appendChild(meta);
+
+  const questionText = document.createElement('h2');
+  questionText.className = 'question-text';
+  questionText.textContent = question.q;
+  card.appendChild(questionText);
+
+  const answers = document.createElement('div');
+  answers.className = 'answers';
+  question.options.forEach(function(option, choiceIndex) {
+    const optionButton = document.createElement('button');
+    optionButton.type = 'button';
+    optionButton.className = 'answer';
+    optionButton.textContent = String.fromCharCode(65 + choiceIndex) + '. ' + option;
+    optionButton.disabled = state.answered;
+    optionButton.addEventListener('click', function() {
+      chooseAnswer(choiceIndex);
+    });
+    if (state.answered) {
+      if (choiceIndex === question.answer) {
+        optionButton.classList.add('correct');
+      }
+      if (choiceIndex === state.selectedChoice && state.selectedChoice !== question.answer) {
+        optionButton.classList.add('wrong');
+      }
+    }
+    answers.appendChild(optionButton);
+  });
+  card.appendChild(answers);
+
+  const feedback = document.createElement('div');
+  feedback.className = 'feedback ' + (state.answered ? (state.selectedChoice === question.answer ? 'good' : 'bad') : '');
+  feedback.id = 'feedback';
+  if (state.answered) {
+    feedback.appendChild(buildFeedbackContent(question));
+  } else {
+    const idle = document.createElement('p');
+    idle.className = 'feedback-text';
+    idle.textContent = 'Choose an answer to see immediate feedback.';
+    feedback.appendChild(idle);
+  }
+  card.appendChild(feedback);
+
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+
+  const homeButton = document.createElement('button');
+  homeButton.type = 'button';
+  homeButton.className = 'ghost';
+  homeButton.textContent = 'Back to start';
+  homeButton.addEventListener('click', function() {
+    startNewSession();
+  });
+  actions.appendChild(homeButton);
+
+  const nextButton = document.createElement('button');
+  nextButton.type = 'button';
+  nextButton.className = 'primary';
+  nextButton.textContent = state.index === state.quiz.length - 1 ? 'See Results' : 'Next Question';
+  nextButton.disabled = !state.answered;
+  nextButton.addEventListener('click', function() {
+    if (state.index >= state.quiz.length - 1) {
+      state.completed = true;
+      saveState();
+      renderResults();
+      return;
+    }
+    state.index += 1;
+    state.answered = false;
+    state.selectedChoice = null;
+    saveState();
+    render();
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+  });
+  actions.appendChild(nextButton);
+  card.appendChild(actions);
+
+  panel.appendChild(card);
+  app.innerHTML = '';
+  app.appendChild(panel);
+  window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+}
+
+function buildFeedbackContent(question) {
+  const wrapper = document.createDocumentFragment();
+  const heading = document.createElement('span');
+  heading.className = 'feedback-title';
+  const correct = state.selectedChoice === question.answer;
+  heading.textContent = correct ? 'Correct answer' : 'Incorrect answer';
+  wrapper.appendChild(heading);
+
+  const text = document.createElement('p');
+  text.className = 'feedback-text';
+  text.textContent = question.explanation;
+  wrapper.appendChild(text);
+
+  const meta = document.createElement('span');
+  meta.className = 'feedback-meta';
+  meta.textContent = 'Handbook page ' + question.page + ' • Category: ' + question.category;
+  wrapper.appendChild(meta);
+  return wrapper;
+}
+
+function chooseAnswer(choiceIndex) {
+  if (state.answered) {
+    return;
+  }
+  const question = currentQuestion();
+  if (!question) {
+    return;
+  }
+  state.answered = true;
+  state.selectedChoice = choiceIndex;
+  if (choiceIndex === question.answer) {
+    state.correct += 1;
+  } else {
+    state.missed.push(state.quiz[state.index]);
+  }
+  saveState();
+  render();
+}
+
+function renderResults() {
+  state.view = 'results';
+  state.completed = true;
+  saveState();
+
+  const total = state.quiz.length || 1;
+  const incorrect = total - state.correct;
+  const percent = Math.round((state.correct / total) * 100);
+  const recommendation = percent >= PASS_THRESHOLD ? 'Pass' : 'Review';
+
+  const panel = document.createElement('section');
+  panel.className = 'results';
+
+  const heading = document.createElement('div');
+  heading.className = 'panel';
+
+  const title = document.createElement('h2');
+  title.className = 'hero-title';
+  title.textContent = 'Test complete';
+  heading.appendChild(title);
+
+  const copy = document.createElement('p');
+  copy.className = 'hero-text';
+  copy.textContent = recommendation === 'Pass'
+    ? 'You met the usual pass threshold for this practice quiz.'
+    : 'The quiz recommends more practice before the next attempt.';
+  heading.appendChild(copy);
+  panel.appendChild(heading);
+
+  const grid = document.createElement('div');
+  grid.className = 'results-grid';
+  const metrics = [
+    ['Correct', state.correct],
+    ['Incorrect', incorrect],
+    ['Score', percent + '%']
+  ];
+  metrics.forEach(function(metric) {
+    const box = document.createElement('div');
+    box.className = 'result-box';
+    const label = document.createElement('div');
+    label.className = 'stat-label';
+    label.textContent = metric[0];
+    const value = document.createElement('span');
+    value.className = 'result-number';
+    value.textContent = String(metric[1]);
+    box.appendChild(label);
+    box.appendChild(value);
+    grid.appendChild(box);
+  });
+  panel.appendChild(grid);
+
+  const recommendationBox = document.createElement('div');
+  recommendationBox.className = 'result-box';
+  const recommendationLabel = document.createElement('div');
+  recommendationLabel.className = 'stat-label';
+  recommendationLabel.textContent = 'Recommendation';
+  const recommendationValue = document.createElement('div');
+  recommendationValue.className = 'result-recommendation';
+  recommendationValue.textContent = recommendation + ' with ' + percent + '% correct';
+  recommendationBox.appendChild(recommendationLabel);
+  recommendationBox.appendChild(recommendationValue);
+  panel.appendChild(recommendationBox);
+
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+
+  const retry = document.createElement('button');
+  retry.type = 'button';
+  retry.className = 'secondary';
+  retry.textContent = 'Retry missed';
+  retry.disabled = !state.missed.length;
+  retry.addEventListener('click', function() {
+    startRetryMissed();
+  });
+  actions.appendChild(retry);
+
+  const newTest = document.createElement('button');
+  newTest.type = 'button';
+  newTest.className = 'primary';
+  newTest.textContent = 'Start New Test';
+  newTest.addEventListener('click', function() {
+    startNewSession();
+  });
+  actions.appendChild(newTest);
+  panel.appendChild(actions);
+
+  app.innerHTML = '';
+  app.appendChild(panel);
+  window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+}
+
+function render() {
+  if (state.view === 'quiz' && state.quiz.length) {
+    renderQuiz();
+    return;
+  }
+  if (state.view === 'results') {
+    renderResults();
+    return;
+  }
+  renderHome();
+}
+
+themeToggle.addEventListener('click', function() {
+  applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+});
+
+applyTheme(getTheme());
+
+if (!restoreState()) {
+  render();
+} else if (state.view === 'results') {
+  renderResults();
+} else {
+  renderQuiz();
+}
+</script>
+</body>
+</html>
