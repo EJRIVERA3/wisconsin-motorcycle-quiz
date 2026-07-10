@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wisconsin-motorcycle-quiz",
+  "compatibility_date": "2026-07-10",
+  "main": "dist/server/index.js",
+  "observability": {
+    "enabled": true
+  }
+}
